@@ -21,7 +21,8 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	private String role;
+	private String role;	// ROLE_USER, ROLE_ADMIN
+//	private Timestamp loginDate;	// 아직 할 때는 아님..
 	@CreationTimestamp
 	private Timestamp createDate;
 }
