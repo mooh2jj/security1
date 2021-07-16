@@ -40,9 +40,11 @@ public class SecurtiyConfig extends WebSecurityConfigurerAdapter{
 			.defaultSuccessUrl("/")			// login이 성공하면 "/" : index 페이지로 간다.
 			.and()
 			.oauth2Login()
-			.loginPage("/loginForm")		// 구글 로그인이 완료된 Tip 코드 x (상태 엑세스토큰 + 사용자 프로필정보)
-			.userInfoEndpoint()
-			.userService(principalOauthUserService);
+			.loginPage("/loginForm")
+				// 1. 코드받기(인증됨거), 2. 엑세스토큰(권한), 3.사용자프로필 정보를 가져옴. 4.그 정보를 토대로 회원가입을 자동으로 진행시킴.
+				// 4-2. (이메일, 전화번호, 이름, 아이디) 쇼핑몰 -> 집주소, 백화점몰 -> vip등급, 일반등급
+			.userInfoEndpoint()							// 구글 로그인이 완료된 뒤의 후처리가 필요함!
+			.userService(principalOauthUserService);	// Tip. 코드 x (상태 엑세스토큰 + 사용자 프로필정보 바로 받아볼 수 있음.)
 	}
 	
 }

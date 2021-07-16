@@ -23,6 +23,10 @@ public class User {
 	private String email;
 	private String role;	// ROLE_USER, ROLE_ADMIN
 //	private Timestamp loginDate;	// 아직 할 때는 아님..
+
+	private String provider;	// ex. google
+	private String providerId;	// sub=116867573910474435505
+
 	@CreationTimestamp
 	private Timestamp createDate;
 }
