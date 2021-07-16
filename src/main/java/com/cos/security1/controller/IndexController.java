@@ -1,9 +1,14 @@
 package com.cos.security1.controller;
 
+import com.cos.security1.config.auth.PrincipalDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
+
+import java.util.Optional;
 
 @Controller
 public class IndexController {
@@ -20,7 +27,35 @@ public class IndexController {
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
+	@GetMapping("/test/login")
+	@ResponseBody
+	public String loginTest(
+			Authentication authentication,
+			@AuthenticationPrincipal PrincipalDetails principalDetails2
+			) {
+		System.out.println("/test/login ============");
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		System.out.println("authentication: " + principalDetails.getUser());
+
+		System.out.println("userDetails: "+ principalDetails2.getUser());
+		return "session check";
+	}
+
+	@GetMapping("/test/oauth/login")
+	@ResponseBody
+	public String loginOAuthTest(
+			Authentication authentication,
+			@AuthenticationPrincipal OAuth2User oAuth
+			) {
+		System.out.println("/test/oauth/login ============");
+		OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+		System.out.println("authentication: " + oAuth2User.getAttributes());
+		System.out.println("OAuth2User: "+ oAuth.getAttributes());
+		return "OAuth check";
+	}
+
+
 	// http://localhost:8082/
 	@GetMapping("/")	
 	public @ResponseBody String index() {
@@ -29,7 +64,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/user")	
-	public @ResponseBody String user() {
+	public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		
 		return "user";	
 	}
