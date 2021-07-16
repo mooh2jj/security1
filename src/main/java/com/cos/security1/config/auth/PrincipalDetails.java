@@ -9,18 +9,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.cos.security1.model.User;
 
 // 시큐리티가 /login 주소 요청이 오면 낚아채서 로그인을 진행시킨다.
-// 로그인을 진행이 완료가 되면 시큐리티 session을 만들어준다. (Security ContextHolder)
+// 로그인을 진행이 완료가 되면 시큐리티 session을 만들어준다. (SecurityContextHolder)
 // 오브젝트 타입 => Authentication 타입 객체
 // Authentication 안에 User정보가 있어야 함.
 // User오브젝트타입 => UserDetails 타입 객체
 
-// Security Session => Authentication => UserDetails(PrincipalDetails)
+// Security Session => Authentication 객체 만들기(PrincipalDetailsService) => UserDetails(PrincipalDetails)
 
 public class PrincipalDetails implements UserDetails{
 
 	private User user;		// 콤포지션
 	
-	public PrincipalDetails(User user) {
+	public PrincipalDetails(User user) {		// PrincipalDetails 안에 User 정보를 넣기 위해 생성자에 셋팅!
 		this.user = user;
 	}
 	
@@ -61,7 +61,7 @@ public class PrincipalDetails implements UserDetails{
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
-	}
+	}	// 기간만료 안됐니? -> true
 
 	@Override
 	public boolean isEnabled() {
