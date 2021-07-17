@@ -22,14 +22,17 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	private User user;		// 콤포지션
-	
+	private Map<String, Object> attributes;
+
+	// 일반 로그인
 	public PrincipalDetails(User user) {		// PrincipalDetails 안에 User 정보를 넣기 위해 생성자에 셋팅!
 		this.user = user;
 	}
 
-	@Override
-	public Map<String, Object> getAttributes() {
-		return null;
+	// OAuth 로그인
+	public PrincipalDetails(User user, Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
 	}
 
 	// 해당 User의 권한을 리턴하는 곳!
@@ -77,6 +80,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 		// 우리 사이트에 1년동안 회원이 로그인을 안하는 휴먼계정으로 한다면,
 		// 현재시간 - 로그인시간 => 1년 초과하면 return false;
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return attributes;
 	}
 
 	@Override
