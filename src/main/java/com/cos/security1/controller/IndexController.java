@@ -6,9 +6,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Controller
@@ -58,8 +62,9 @@ public class IndexController {
 
 	// http://localhost:8082/
 	@GetMapping("/")	
-	public @ResponseBody String index() {
+	public String index() {
 		// 머스테치 로 기본으로 설정 -> html로 할려면 설정을 더해야 한다. WebMvcConfig로 mustache -> html 설정!
+		System.out.println("#########");
 		return "index";	// => src/main/resources/templates/index.mustache
 	}
 
@@ -79,6 +84,18 @@ public class IndexController {
 	public String loginForm() {
 		
 		return "loginForm";	
+	}
+
+	@GetMapping("/logout.do")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("logout");
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null) {
+			new SecurityContextLogoutHandler().logout(request, response, authentication);
+		}
+
+		return "redirect:/loginForm";
 	}
 	
 	@GetMapping("/joinForm")	// 회원가입 페이지로 이동
