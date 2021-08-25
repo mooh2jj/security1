@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.cos.security1.config.oauth.PrincipalOauthUserService;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity  // 스프링 시큐리티 필터가 스프링 필터체인에 등록이 됨.
@@ -24,7 +25,7 @@ public class SecurtiyConfig extends WebSecurityConfigurerAdapter{
 	public BCryptPasswordEncoder encodePwd() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();		// 사이트 간 요청 위조(Cross-site Request Forgery) 비활성화
@@ -42,8 +43,9 @@ public class SecurtiyConfig extends WebSecurityConfigurerAdapter{
 				.logout()
 				.logoutUrl("/logout.do")
 				.logoutSuccessUrl("/loginForm")
-				.invalidateHttpSession(true)	// 로그아웃 이후 세션 전체 삭제 여부
-				.clearAuthentication(true)
+				.invalidateHttpSession(true).deleteCookies("JSESSIONID")
+//				.invalidateHttpSession(true)	// 로그아웃 이후 세션 전체 삭제 여부
+//				.clearAuthentication(true)
 			.and()
 				.oauth2Login()	// oauth2 로그인 설정
 				.loginPage("/loginForm")

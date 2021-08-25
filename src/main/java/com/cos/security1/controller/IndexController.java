@@ -1,6 +1,8 @@
 package com.cos.security1.controller;
 
 import com.cos.security1.config.auth.PrincipalDetails;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,11 +54,22 @@ public class IndexController {
 			Authentication authentication,
 			@AuthenticationPrincipal OAuth2User oAuth
 			) {
+
+		String result = "";
 		System.out.println("/test/oauth/login ============");
 		OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 		System.out.println("authentication: " + oAuth2User.getAttributes());
 		System.out.println("OAuth2User: "+ oAuth.getAttributes());
-		return "OAuth check";
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		try {
+			result = objectMapper.writeValueAsString(oAuth);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 
