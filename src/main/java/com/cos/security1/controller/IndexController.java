@@ -73,12 +73,7 @@ public class IndexController {
 		System.out.println("principalDetails: "+ principalDetails.getUser());
 		return "user";	
 	}
-	
-	@GetMapping("/manager")	
-	public @ResponseBody String manager() {
-		
-		return "manager";	
-	}
+
 	
 	@GetMapping("/loginForm")	// 시큐리티 낚아채지 않게 설정!
 	public String loginForm() {
@@ -125,9 +120,9 @@ public class IndexController {
 
 	// 2) prePostEnabled
 	@PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")    // @EnableGlobalMethodSecurity(prePostEnabled = true) : secured 어노테이션 활성화
-	@GetMapping("/data")
-	public @ResponseBody String data() {
-		return "data";
+	@GetMapping("/manager")
+	public @ResponseBody String manager() {
+		return "manager";
 	}
 	
 }

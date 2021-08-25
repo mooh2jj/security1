@@ -18,7 +18,7 @@ public class PrincipalDetailsService implements UserDetailsService{
 	@Autowired
 	private UserRepository userRepository; 
 	
-	// 시큐리티 session(-> Authentication(-> UserDetails)) 이런식으로 들어가짐.
+	// 시큐리티 session(-> Authentication Manager (UserDetailsService.loadUserByUsername() -> UserDetails)) 이런식으로 들어가짐.
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		System.out.println("username: "+ username);
